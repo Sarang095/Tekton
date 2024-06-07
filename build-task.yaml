@@ -1,0 +1,34 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-task
+spec:
+  params:
+    - name: dockerfile
+      type: string
+      description: "Path to the Dockerfile"
+    - name: context
+      type: string
+      description: "Build context"
+    - name: imageName
+      type: string
+      description: "Name for the built Docker image"
+  workspaces:
+    - name: source
+  steps:
+    - name: start-docker-daemon
+      image: docker:stable
+      command: ["sh", "-c"]
+      args:
+        - |
+          dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 &
+          until docker info >/dev/null 2>&1; do
+              echo "Waiting for Docker to start..."
+              sleep 1
+          done
+    - name: building
+      image: docker:stable
+      script: |
+        #!/bin/sh
+        docker build -f $(workspaces.source.path)/git-repo/$(params.dockerfile) -t $(params.imageName) $(workspaces.source.path)/git-repo/$(params.context)
+

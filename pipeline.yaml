@@ -1,0 +1,64 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: build-and-push-pipeline
+spec:
+  params:
+    - name: githubRepoURL
+      type: string
+      description: "The URL of the GitHub repository"
+    - name: dockerHubUsername
+      type: string
+      description: "The username for Docker Hub"
+    - name: dockerHubPassword
+      type: string
+      description: "The password for Docker Hub"
+    - name: dockerHubImageName
+      type: string
+      description: "The name of the Docker image"
+    - name: dockerfile
+      type: string
+      description: "Path to the Dockerfile"
+    - name: context
+      type: string
+      description: "Build context"
+  workspaces:
+    - name: shared-workspace
+  tasks:
+    - name: clone
+      taskRef:
+        name: clone-task
+      params:
+        - name: githubRepoURL
+          value: $(params.githubRepoURL)
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+    - name: build
+      taskRef:
+        name: build-task
+      params:
+        - name: dockerfile
+          value: $(params.dockerfile)
+        - name: context
+          value: $(params.context)
+        - name: imageName
+          value: $(params.dockerHubUsername)/$(params.dockerHubImageName)
+      runAfter:
+        - clone
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+    - name: push
+      taskRef:
+        name: push-task
+      params:
+        - name: dockerHubUsername
+          value: $(params.dockerHubUsername)
+        - name: dockerHubPassword
+          value: $(params.dockerHubPassword)
+        - name: dockerHubImageName
+          value: $(params.dockerHubUsername)/$(params.dockerHubImageName)
+      runAfter:
+        - build
+

@@ -1,0 +1,33 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: push-task
+spec:
+  params:
+    - name: dockerHubUsername
+      type: string
+      description: "The username for Docker Hub"
+    - name: dockerHubPassword
+      type: string
+      description: "The password for Docker Hub"
+    - name: dockerHubImageName
+      type: string
+      description: "The name of the Docker image"
+  steps:
+    - name: start-docker-daemon
+      image: docker:stable
+      command: ["sh", "-c"]
+      args:
+        - |
+          dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 &
+          until docker info >/dev/null 2>&1; do
+              echo "Waiting for Docker to start..."
+              sleep 1
+          done
+    - name: pushing
+      image: docker:stable
+      script: |
+        #!/bin/sh
+        echo $(params.dockerHubPassword) | docker login -u $(params.dockerHubUsername) --password-stdin
+        docker push $(params.dockerHubUsername)/$(params.dockerHubImageName)
+

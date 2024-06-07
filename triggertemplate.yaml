@@ -1,0 +1,44 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: pipeline-template
+spec:
+  params:
+    - name: githubRepoURL
+      description: The URL of the GitHub repository
+    - name: dockerHubUsername
+      description: Docker Hub username
+    - name: dockerHubPassword
+      description: Docker Hub password
+    - name: dockerHubImageName
+      description: Docker Hub image name
+    - name: dockerfile
+      description: Path to Dockerfile
+    - name: context
+      description: Build context
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: build-and-push-pipeline-run-
+      spec:
+        pipelineRef:
+          name: build-and-push-pipeline
+        params:
+          - name: githubRepoURL
+            value: $(params.githubRepoURL)
+          - name: dockerHubUsername
+            value: $(params.dockerHubUsername)
+          - name: dockerHubPassword
+            value: $(params.dockerHubPassword)
+          - name: dockerHubImageName
+            value: $(params.dockerHubImageName)
+          - name: dockerfile
+            value: $(params.dockerfile)
+          - name: context
+            value: $(params.context)
+        workspaces:
+          - name: shared-workspace
+            persistentVolumeClaim:
+              claimName: my-claim
+

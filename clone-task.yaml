@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: clone-task
+spec:
+  params:
+    - name: githubRepoURL
+      type: string
+      description: "The URL of the GitHub repository"
+  workspaces:
+    - name: output
+  steps:
+    - name: cloning
+      image: alpine/git
+      script: |
+        #!/bin/sh
+        git clone $(params.githubRepoURL) $(workspaces.output.path)/git-repo
+

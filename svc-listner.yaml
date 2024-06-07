@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: el-github-listener
+  labels:
+    app: tekton-triggers
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  selector:
+    eventlistener: github-listener
+

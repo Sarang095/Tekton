@@ -1,0 +1,19 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: pipeline-binding
+spec:
+  params:
+    - name: githubRepoURL
+      value: $(body.repository.clone_url)
+    - name: dockerHubUsername
+      value: csag095
+    - name: dockerHubPassword
+      value: secureforall@54
+    - name: dockerHubImageName
+      value: rails-db-app-web
+    - name: dockerfile
+      value: Dockerfile
+    - name: context
+      value: .
+
