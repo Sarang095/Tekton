@@ -24,7 +24,7 @@ spec:
             echo "Waiting for Docker to start..."
             sleep 1
         done
-        docker build -f $(workspaces.source.path)/git-repo/$(params.dockerfile) -t $(params.imageName) $(workspaces.source.path)/git-repo/$(params.context)
+        docker build -f $(workspaces.source.path)/git-repo/$(params.dockerfile) -t $(params.imageName):latest $(workspaces.source.path)/git-repo/$(params.context)
   sidecars:
     - name: docker-daemon
       image: docker:stable-dind
