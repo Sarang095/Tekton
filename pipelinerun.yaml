@@ -13,7 +13,7 @@ spec:
     - name: githubRepoURL
       value: "https://github.com/Sarang095/Rails-DB-APP.git"
     - name: dockerfile
-      value: "Dockerfile"
+      value: "Rails-DB-APP/Dockerfile"
     - name: context
       value: "."
     - name: imageName
