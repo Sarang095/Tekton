@@ -14,5 +14,8 @@ spec:
       image: alpine/git
       script: |
         #!/bin/sh
+        if [ -d "$(workspaces.output.path)/git-repo" ]; then
+          echo "Removing existing repository at $(workspaces.output.path)/git-repo"
+          rm -rf $(workspaces.output.path)/git-repo
+        fi
         git clone $(params.githubRepoURL) $(workspaces.output.path)/git-repo
-
