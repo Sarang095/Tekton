@@ -11,13 +11,13 @@ spec:
         claimName: my-claim
   params:
     - name: githubRepoURL
-      value: "https://github.com/csag095/Rails-DB-APP.git"
+      value: "https://github.com/Sarang095/Rails-DB-APP.git"
     - name: dockerfile
       value: "Dockerfile"
     - name: context
       value: "."
     - name: imageName
-      value: "csag095/rails-db-app"
+      value: "csag095/rails-db-app-web"
     - name: dockerHubUsername
       value: "csag095"
     - name: dockerHubPassword
