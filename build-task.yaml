@@ -16,28 +16,16 @@ spec:
   workspaces:
     - name: source
   steps:
-    - name: building
-      image: docker:stable
-      script: |
-        #!/bin/sh
-        until docker info >/dev/null 2>&1; do
-            echo "Waiting for Docker to start..."
-            sleep 1
-        done
-        docker build -f $(workspaces.source.path)/git-repo/$(params.dockerfile) -t $(params.imageName):latest $(workspaces.source.path)/git-repo/$(params.context)
-  sidecars:
-    - name: docker-daemon
-      image: docker:stable-dind
-      securityContext:
-        privileged: true
-      command:
-        - dockerd
+    - name: build-and-push
+      image: gcr.io/kaniko-project/executor:latest
       args:
-        - --host=unix:///var/run/docker.sock
-        - --host=tcp://0.0.0.0:2375
+        - --dockerfile=$(workspaces.source.path)/git-repo/$(params.dockerfile)
+        - --context=$(workspaces.source.path)/git-repo/$(params.context)
+        - --destination=$(params.imageName):latest
       volumeMounts:
-        - name: dind-storage
-          mountPath: /var/lib/docker
+        - name: kaniko-secret
+          mountPath: /kaniko/.docker
   volumes:
-    - name: dind-storage
-      emptyDir: {}
+    - name: kaniko-secret
+      secret:
+        secretName: kaniko-secret
