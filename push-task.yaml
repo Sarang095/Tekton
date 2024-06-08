@@ -17,7 +17,7 @@ spec:
     - name: push
       image: gcr.io/kaniko-project/executor:latest
       args:
-        - --destination=$(params.dockerHubUsername)/$(params.dockerHubImageName):latest
+        - --destination=$(params.dockerHubImageName):latest
       volumeMounts:
         - name: kaniko-secret
           mountPath: /kaniko/.docker
