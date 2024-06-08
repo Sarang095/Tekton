@@ -17,7 +17,7 @@ spec:
     - name: context
       value: "."
     - name: imageName
-      value: "csag095/rails-db-app-web"
+      value: "rails-db-app-web"
     - name: dockerHubUsername
       value: "csag095"
     - name: dockerHubPassword
