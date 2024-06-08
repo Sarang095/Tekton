@@ -5,21 +5,20 @@ metadata:
 spec:
   pipelineRef:
     name: build-and-push-pipeline
-  params:
-    - name: githubRepoURL
-      value: "https://github.com/Sarang095/Rails-DB-APP.git"
-    - name: dockerHubUsername
-      value: "csag095"
-    - name: dockerHubPassword
-      value: "secureforall@54"
-    - name: dockerHubImageName
-      value: "rails-db-app-web"
-    - name: dockerfile
-      value: "Dockerfile"
-    - name: context
-      value: "."
   workspaces:
     - name: shared-workspace
       persistentVolumeClaim:
         claimName: my-claim
-
+  params:
+    - name: githubRepoURL
+      value: "https://github.com/csag095/Rails-DB-APP.git"
+    - name: dockerfile
+      value: "Dockerfile"
+    - name: context
+      value: "."
+    - name: imageName
+      value: "csag095/rails-db-app"
+    - name: dockerHubUsername
+      value: "csag095"
+    - name: dockerHubPassword
+      value: "secureforall@54"
