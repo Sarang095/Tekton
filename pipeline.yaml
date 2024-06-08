@@ -6,22 +6,16 @@ spec:
   params:
     - name: githubRepoURL
       type: string
-      description: "The URL of the GitHub repository"
-    - name: dockerHubUsername
-      type: string
-      description: "The username for Docker Hub"
-    - name: dockerHubPassword
-      type: string
-      description: "The password for Docker Hub"
-    - name: dockerHubImageName
-      type: string
-      description: "The name of the Docker image"
     - name: dockerfile
       type: string
-      description: "Path to the Dockerfile"
     - name: context
       type: string
-      description: "Build context"
+    - name: imageName
+      type: string
+    - name: dockerHubUsername
+      type: string
+    - name: dockerHubPassword
+      type: string
   workspaces:
     - name: shared-workspace
   tasks:
@@ -43,9 +37,7 @@ spec:
         - name: context
           value: $(params.context)
         - name: imageName
-          value: $(params.dockerHubUsername)/$(params.dockerHubImageName)
-      runAfter:
-        - clone
+          value: $(params.imageName)
       workspaces:
         - name: source
           workspace: shared-workspace
@@ -58,7 +50,9 @@ spec:
         - name: dockerHubPassword
           value: $(params.dockerHubPassword)
         - name: dockerHubImageName
-          value: $(params.dockerHubUsername)/$(params.dockerHubImageName)
+          value: $(params.imageName)
+      workspaces:
+        - name: source
+          workspace: shared-workspace
       runAfter:
         - build
-
