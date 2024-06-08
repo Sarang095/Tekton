@@ -21,7 +21,7 @@ spec:
       args:
         - --dockerfile=/workspace/source/git-repo/$(params.dockerfile)
         - --context=/workspace/source/git-repo
-        - --destination=$(params.imageName):latest
+        - --destination=$(params.imageName):8.0.0
       volumeMounts:
         - name: kaniko-secret
           mountPath: /kaniko/.docker
