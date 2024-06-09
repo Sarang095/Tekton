@@ -5,7 +5,7 @@ metadata:
 spec:
   params:
     - name: githubRepoURL
-      value: $(body.repository.clone_url)
+      value: https://github.com/Sarang095/Rails-DB-APP.git
     - name: dockerHubUsername
       value: csag095
     - name: dockerHubPassword
