@@ -43,19 +43,3 @@ spec:
         - name: source
           workspace: shared-workspace
         - name: my-secret
-    - name: push
-      taskRef:
-        name: push-task
-      params:
-        - name: dockerHubUsername
-          value: $(params.dockerHubUsername)
-        - name: dockerHubPassword
-          value: $(params.dockerHubPassword)
-        - name: dockerHubImageName
-          value: $(params.imageName)
-      workspaces:
-        - name: source
-          workspace: shared-workspace
-        - name: my-secret
-      runAfter:
-        - build
