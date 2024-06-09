@@ -54,7 +54,6 @@ spec:
       workspaces:
         - name: source
           workspace: shared-workspace
-        - name: kaniko-secret
-          workspace: my-secret
+        - name: my-secret
       runAfter:
         - build
