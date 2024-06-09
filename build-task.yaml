@@ -15,6 +15,7 @@ spec:
       description: "Name for the built Docker image"
   workspaces:
     - name: source
+    - name: my-secret
   steps:
     - name: build-and-push
       image: gcr.io/kaniko-project/executor:latest
