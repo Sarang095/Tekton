@@ -10,7 +10,7 @@ spec:
       description: Docker Hub username
     - name: dockerHubPassword
       description: Docker Hub password
-    - name: dockerHubImageName
+    - name: imageName
       description: Docker Hub image name
     - name: dockerfile
       description: Path to Dockerfile
@@ -31,8 +31,8 @@ spec:
             value: $(params.dockerHubUsername)
           - name: dockerHubPassword
             value: $(params.dockerHubPassword)
-          - name: dockerHubImageName
-            value: $(params.dockerHubImageName)
+          - name: imageName
+            value: $(params.imageName)
           - name: dockerfile
             value: $(params.dockerfile)
           - name: context
@@ -41,4 +41,5 @@ spec:
           - name: shared-workspace
             persistentVolumeClaim:
               claimName: my-claim
+          - name: my-secret
 
