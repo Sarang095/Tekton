@@ -9,8 +9,9 @@ spec:
     - name: shared-workspace
       persistentVolumeClaim:
         claimName: my-claim
-    - name: kaniko-secret
-      workspace: my-secret
+    - name: my-secret
+      secret: 
+        secretName: my-secret
   params:
     - name: githubRepoURL
       value: "https://github.com/Sarang095/Rails-DB-APP.git"
