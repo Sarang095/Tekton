@@ -15,8 +15,7 @@ spec:
       description: "The name of the Docker image"
   workspaces:
     - name: source
-    - name: kaniko-secret
-      workspace: my-secret
+    - name: my-secret
   steps:
     - name: push
       image: gcr.io/kaniko-project/executor:latest
