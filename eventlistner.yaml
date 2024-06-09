@@ -3,8 +3,6 @@ kind: EventListener
 metadata:
   name: github-listener
 spec:
-  annotations:
-    tekton.dev/payload-validation: "false" 
   serviceAccountName: tekton-event-listener-sa
   triggers:
     - name: github-trigger
