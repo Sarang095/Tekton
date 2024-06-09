@@ -42,4 +42,5 @@ spec:
             persistentVolumeClaim:
               claimName: my-claim
           - name: my-secret
-
+            secret:
+              secretName: my-secret
