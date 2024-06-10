@@ -43,5 +43,3 @@ spec:
         - name: source
           workspace: shared-workspace
         - name: my-secret
-          secret: 
-            secretName: my-secret
