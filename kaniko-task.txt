@@ -1,0 +1,72 @@
+Install the kaniko image and then modify the parameters and workspaces according to this file 
+
+Name:         kaniko
+Namespace:    default
+Labels:       app.kubernetes.io/version=0.6
+Annotations:  tekton.dev/categories: Image Build
+              tekton.dev/displayName: Build and upload container image using Kaniko
+              tekton.dev/pipelines.minVersion: 0.17.0
+              tekton.dev/platforms: linux/amd64,linux/arm64,linux/ppc64le
+              tekton.dev/tags: image-build
+API Version:  tekton.dev/v1
+Kind:         Task
+Metadata:
+  Creation Timestamp:  2024-06-10T18:34:07Z
+  Generation:          6
+  Resource Version:    38214
+  UID:                 c6c068d0-f773-4c8d-9cb5-1479989d57a8
+Spec:
+  Description:  This Task builds a simple Dockerfile with kaniko and pushes to a registry. This Task stores the image name and digest as results, allowing Tekton Chains to pick up that an image was built & signit.
+  Params:
+    Description:  Name (reference) of the image to build.
+    Name:         imageName
+    Type:         string
+    Default:      ./Dockerfile
+    Description:  Path to the Dockerfile to build.
+    Name:         dockerfile
+    Type:         string
+    Default:      ./
+    Description:  The build context used by Kaniko.
+    Name:         context
+    Type:         string
+    Default:
+    Name:         EXTRA_ARGS
+    Type:         array
+    Default:      gcr.io/kaniko-project/executor:v1.5.1@sha256:c6166717f7fe0b7da44908c986137ecfeab21f31ec3992f6e128fff8a94be8a5
+    Description:  The image on which builds will run (default is v1.5.1)
+    Name:         BUILDER_IMAGE
+    Type:         string
+  Results:
+    Description:  Digest of the image just built.
+    Name:         IMAGE_DIGEST
+    Type:         string
+    Description:  URL of the image just built.
+    Name:         IMAGE_URL
+    Type:         string
+  Steps:
+    Args:
+      $(params.EXTRA_ARGS)
+      --context=/workspace/output/git-repo
+      --destination=$(params.imageName)
+      --digest-file=$(results.IMAGE_DIGEST.path)
+      --force
+    Compute Resources:
+    Image:  $(params.BUILDER_IMAGE)
+    Name:   build-and-push
+    Security Context:
+      Run As User:  0
+    Working Dir:    /workspace/output/git-repo/
+    Compute Resources:
+    Image:   docker.io/library/bash:5.1.4@sha256:c523c636b722339f41b6a431b44588ab2f762c5de5ec3bd7964420ff982fb1d9
+    Name:    write-url
+    Script:  set -e
+image="$(params.imageName)"
+echo -n "${image}" | tee "$(results.IMAGE_URL.path)"
+
+  Workspaces:
+    Description:  Holds the context and Dockerfile
+    Name:         output
+    Description:  Includes a docker `config.json`
+    Mount Path:   /kaniko/.docker
+    Name:         my-secret
+    Optional:     true
