@@ -24,19 +24,6 @@ spec:
       spec:
         pipelineRef:
           name: build-and-push-pipeline
-        params:
-          - name: githubRepoURL
-            value: $(params.githubRepoURL)
-          - name: dockerHubUsername
-            value: $(params.dockerHubUsername)
-          - name: dockerHubPassword
-            value: $(params.dockerHubPassword)
-          - name: imageName
-            value: $(params.imageName)
-          - name: dockerfile
-            value: $(params.dockerfile)
-          - name: context
-            value: $(params.context)
         workspaces:
           - name: shared-workspace
             persistentVolumeClaim:
@@ -44,3 +31,17 @@ spec:
           - name: my-secret
             secret:
               secretName: my-secret
+        params:
+          - name: githubRepoURL
+            value: https://github.com/Sarang095/Rails-DB-APP.git
+          - name: dockerfile
+            value: $(params.dockerfile)
+          - name: context
+            value: $(params.context)
+          - name: imageName
+            value: csag095/rails-db-app-web
+          - name: dockerHubUsername
+            value: $(params.dockerHubUsername)
+          - name: dockerHubPassword
+            value: $(params.dockerHubPassword)
+        serviceAccountName: tekton-event-listener-sa
