@@ -31,7 +31,7 @@ spec:
           workspace: shared-workspace
     - name: build
       taskRef:
-        name: build-task
+        name: kaniko
       params:
         - name: dockerfile
           value: $(params.dockerfile)
@@ -40,6 +40,7 @@ spec:
         - name: imageName
           value: $(params.imageName)
       workspaces:
-        - name: source
+        - name: output
           workspace: shared-workspace
         - name: my-secret
+          workspace: my-secret
