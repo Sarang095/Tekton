@@ -1,0 +1,44 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: update-deployment-yaml
+spec:
+  params:
+    - name: NEW_IMAGE
+      description: The new image reference.
+      default: csag095/rails-db-app-web:latest
+  workspaces:
+    - name: output
+      description: The source workspace containing the git repo.
+    - name: git-credentials
+  steps:
+    - name: update-yaml
+      image: alpine:3.12
+      workingDir: /workspace/output/git-repo
+      script: |
+        set -e
+        echo "Updating rails-app-dep.yaml with new image: $(params.NEW_IMAGE)"
+        sed -i 's|image: csag095/rails-db-app-web:.*|image: csag095/rails-db-app-web:latest|' kube-manifest/rails-app-dep.yaml
+    - name: git-commit
+      image: alpine/git:latest
+      workingDir: /workspace/output/git-repo
+      script: |
+        set -e
+        git config --global user.email "sarangchafekar8788459986@gmail.com"
+        git config --global user.name "Sarang095"
+        git add kube-manifest/rails-app-dep.yaml
+        git commit -m "Update image to latest version"
+    - name: git-push
+      image: alpine/git:latest
+      workingDir: /workspace/output/git-repo
+      env:
+        - name: GIT_CREDENTIALS
+          valueFrom:
+            secretKeyRef:
+              name: git-credentials
+              key: PAT
+      script: |
+        set -e
+        git remote set-url origin https://$(GIT_CREDENTIALS):$(GIT_CREDENTIALS)@github.com/Sarang095/https://github.com/Sarang095/Rails-DB-APP.git
+        git push origin HEAD
+

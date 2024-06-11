@@ -19,6 +19,7 @@ spec:
   workspaces:
     - name: shared-workspace
     - name: my-secret
+    - name: git-credentials
   tasks:
     - name: clone
       taskRef:
@@ -30,17 +31,33 @@ spec:
         - name: output
           workspace: shared-workspace
     - name: build
+      runAfter:
+        - clone
       taskRef:
         name: kaniko
       params:
+        - name: imageName
+          value: $(params.imageName)
         - name: dockerfile
           value: $(params.dockerfile)
         - name: context
           value: $(params.context)
-        - name: imageName
-          value: $(params.imageName)
       workspaces:
         - name: output
           workspace: shared-workspace
         - name: my-secret
           workspace: my-secret
+    - name: update-yaml-and-push
+      runAfter:
+        - build
+      taskRef:
+        name: update-deployment-yaml
+      params:
+        - name: NEW_IMAGE
+          value: $(params.imageName):latest
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+        - name: git-credentials
+          workspace: git-credentials
+

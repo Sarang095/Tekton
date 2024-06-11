@@ -31,6 +31,9 @@ spec:
           - name: my-secret
             secret:
               secretName: my-secret
+          - name: git-credentials
+            secret: 
+              secretName: git-credentials
         params:
           - name: githubRepoURL
             value: https://github.com/Sarang095/Rails-DB-APP.git
